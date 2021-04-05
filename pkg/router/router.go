@@ -28,6 +28,8 @@ func getRoutes(r *gin.Engine) error {
 // addCommonRoutes creates the common routes. Exposing public keys and
 func addCommonRoutes(rg *gin.RouterGroup) {
 	rg.GET("/ping", pingHandler)
+
+	// pubkey is the endpoint that will show the public key you can use to validate jwt tokens.
 	rg.GET("/pubkey", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "pong")
 	})
