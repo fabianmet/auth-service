@@ -48,7 +48,7 @@ func (i *InMemoryClient) Delete(s string) error {
 	i.contents[len(i.contents)-1] = inMemoryObject{}
 	i.contents = i.contents[:len(i.contents)-1]
 
-	ind, err = i.findInSlice(s)
+	_, err = i.findInSlice(s)
 	if errors.Is(err, errInMemoryKeyNotFound) {
 		return nil
 	}
