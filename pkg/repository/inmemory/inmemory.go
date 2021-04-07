@@ -4,6 +4,10 @@ package inmemory
 
 import "errors"
 
+var inMemoryKeyNotFound error = errors.New("repository: key not found")
+var inMemoryDuplicateKeyFound error = errors.New("repository: duplicate key found")
+var inMemoryKeyAlreadyExists error = errors.New("repository: key already exists")
+
 //InMemoryClient is an in memory client that stores objects in memory.
 type InMemoryClient struct {
 	contents []inMemoryObject
@@ -43,7 +47,12 @@ func (i *InMemoryClient) Delete(s string) error {
 	i.contents[ind] = i.contents[len(i.contents)-1]
 	i.contents[len(i.contents)-1] = inMemoryObject{}
 	i.contents = i.contents[:len(i.contents)-1]
-	return nil
+
+	ind, err = i.findInSlice(s)
+	if errors.Is(err, inMemoryKeyNotFound) {
+		return nil
+	}
+	return inMemoryDuplicateKeyFound
 }
 
 func (i *InMemoryClient) Create(s string, b []byte) error {
@@ -51,8 +60,12 @@ func (i *InMemoryClient) Create(s string, b []byte) error {
 		key:       s,
 		byteArray: b,
 	}
-	i.contents = append(i.contents, content)
-	return nil
+	_, err := i.Read(content.key)
+	if errors.Is(err, inMemoryKeyNotFound) {
+		i.contents = append(i.contents, content)
+		return nil
+	}
+	return inMemoryKeyAlreadyExists
 }
 
 func (i *InMemoryClient) UpdateKey(s string, b []byte) error {
@@ -79,5 +92,5 @@ func (i *InMemoryClient) findInSlice(s string) (int, error) {
 			return ind, nil
 		}
 	}
-	return -1, errors.New("repository: key not found")
+	return -1, inMemoryKeyNotFound
 }
