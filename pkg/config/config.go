@@ -7,9 +7,10 @@ import (
 	"strings"
 )
 
+// Config contains our config struct.
 type Config struct {
-	// RsaKeySize is the size of the RSA key in bytes.
-	RsaKeySize int
+	// KeySize is the size of the RSA key in bytes. 1024, 2048 or 4096
+	KeySize int
 }
 
 // Simple helper function to read an environment or return a default value
