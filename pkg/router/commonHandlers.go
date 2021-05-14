@@ -3,15 +3,18 @@ package router
 import (
 	"fmt"
 	"net/http"
+	"net/url"
+
+	"github.com/fabianmet/auth-service/pkg/types"
 )
 
 //pingHandler because im playing around
-func pingHandler(w http.ResponseWriter, r *http.Request) {
+func (router *Router) pingHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "pong")
 }
 
 //whoAmIHandler returns information about who you are.
-func whoAmIHandler(w http.ResponseWriter, r *http.Request) {
+func (router *Router) whoAmIHandler(w http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("idtoken")
 
 	// assume not logged in
@@ -23,37 +26,33 @@ func whoAmIHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //iAmHandler returns information about who you are.
-func iAmHandler(w http.ResponseWriter, r *http.Request) {
+func (router *Router) iAmHandler(w http.ResponseWriter, r *http.Request) {
 
-	// Groups := []types.Group{
-	// 	types.Group{
-	// 		Name: "admin",
-	// 	},
-	// 	types.Group{
-	// 		Name: "User",
-	// 	},
-	// }
+	Groups := []string{
+		"admin",
+		"User",
+	}
 
-	// u := &url.URL{
-	// 	Scheme: "http",
-	// 	Host:   "localhost",
-	// 	Path:   "picture_goes_here.png",
-	// }
+	u := &url.URL{
+		Scheme: "http",
+		Host:   "localhost",
+		Path:   "picture_goes_here.png",
+	}
 
-	// User := &types.User{
-	// 	Subject:           "hoppity",
-	// 	EmailVerified:     true,
-	// 	GiveName:          "FirstName",
-	// 	FamilyName:        "LastName",
-	// 	Picture:           u,
-	// 	PreferredUserName: "Clown",
-	// 	Email:             "foo@example.com",
-	// 	Groups:            Groups,
-	// }
+	User := &types.User{
+		Subject:           "hoppity",
+		EmailVerified:     true,
+		GiveName:          "FirstName",
+		FamilyName:        "LastName",
+		Picture:           u,
+		PreferredUserName: "Clown",
+		Email:             "foo@example.com",
+		Groups:            Groups,
+	}
 
 	cookie := &http.Cookie{
 		Name:     "idtoken",
-		Value:    "token goes here",
+		Value:    string(router.Server.Key.GenerateJWT(User)),
 		Path:     "/",
 		Secure:   true,
 		HttpOnly: true,

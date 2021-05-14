@@ -67,7 +67,7 @@ func (r *RsaKey) GenerateJWT(u *types.User) []byte {
 	claimMap["email_verified"] = u.EmailVerified
 	claimMap["given_name"] = u.GiveName
 	claimMap["family_name"] = u.FamilyName
-	claimMap["picture"] = u.Picture
+	claimMap["picture"] = u.Picture.String()
 	claimMap["preferred_username"] = u.PreferredUserName
 	claimMap["email"] = u.Email
 	claimMap["customurlpathinc"] = u.Groups

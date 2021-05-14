@@ -1,18 +1,15 @@
 package main
 
 import (
-	"github.com/fabianmet/auth-service/pkg/jwt"
 	"github.com/fabianmet/auth-service/pkg/router"
+	"github.com/fabianmet/auth-service/pkg/server"
 )
 
 func main() {
 
-	key := jwt.NewRsaKey()
+	s := server.NewServer()
 
-	r, err := router.NewRouter()
-	if err != nil {
-		panic(err)
-	}
+	r := router.NewRouter(s)
 
-	router.StartServer(r)
+	r.StartServer()
 }

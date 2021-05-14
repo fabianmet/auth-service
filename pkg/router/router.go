@@ -6,26 +6,37 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/fabianmet/auth-service/pkg/server"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 )
 
-func StartServer(m *mux.Router) {
+type Router struct {
+	Server *server.Server
+	Muxer  *mux.Router
+}
+
+func (r *Router) StartServer() {
 	log.Printf("Starting the server on %d\n", 8080)
-	err := http.ListenAndServe(fmt.Sprintf("127.0.0.1:%d", 8080), handlers.LoggingHandler(os.Stdout, m))
+	err := http.ListenAndServe(fmt.Sprintf("127.0.0.1:%d", 8080), handlers.LoggingHandler(os.Stdout, r.Muxer))
 	if err != nil {
 		log.Println(err)
 	}
 }
 
-func NewRouter() (*mux.Router, error) {
+func NewRouter(s *server.Server) *Router {
 	r := mux.NewRouter()
 
+	router := &Router{
+		Server: s,
+		Muxer:  r,
+	}
+
 	addCommonMiddleware(r)
-	addCommonRoutes(r)
+	router.addCommonRoutes(r)
 	printRoutes(r)
 
-	return r, nil
+	return router
 }
 
 func addCommonMiddleware(m *mux.Router) {
@@ -41,10 +52,10 @@ func printRoutes(m *mux.Router) {
 }
 
 // addCommonRoutes creates the common routes. Exposing public keys and
-func addCommonRoutes(m *mux.Router) {
-	m.HandleFunc("/ping", pingHandler).Methods("GET")
-	m.HandleFunc("/whoami", whoAmIHandler).Methods("GET")
-	m.HandleFunc("/iam", iAmHandler).Methods("GET")
+func (router *Router) addCommonRoutes(m *mux.Router) {
+	m.HandleFunc("/ping", router.pingHandler).Methods("GET")
+	m.HandleFunc("/whoami", router.whoAmIHandler).Methods("GET")
+	m.HandleFunc("/iam", router.iAmHandler).Methods("GET")
 }
 
 // // addGoogleRoutes creates the google specific routes

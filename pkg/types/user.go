@@ -10,7 +10,7 @@ type User struct {
 	Picture           *url.URL
 	PreferredUserName string
 	Email             string
-	Groups            []Group
+	Groups            []string
 }
 
 type Group struct {
