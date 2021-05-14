@@ -15,3 +15,6 @@ run-server:
 PHONY: test-all
 test-all:
 	@echo "pkg/repository/inmemory" && go test pkg/repository/inmemory/*
+
+fresh:
+	@cd cmd/server && fresh

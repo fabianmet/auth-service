@@ -10,5 +10,5 @@ func main() {
 		panic(err)
 	}
 
-	r.Run()
+	router.StartServer(r)
 }
