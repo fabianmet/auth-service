@@ -24,6 +24,33 @@ func whoAmIHandler(w http.ResponseWriter, r *http.Request) {
 
 //iAmHandler returns information about who you are.
 func iAmHandler(w http.ResponseWriter, r *http.Request) {
+
+	// Groups := []types.Group{
+	// 	types.Group{
+	// 		Name: "admin",
+	// 	},
+	// 	types.Group{
+	// 		Name: "User",
+	// 	},
+	// }
+
+	// u := &url.URL{
+	// 	Scheme: "http",
+	// 	Host:   "localhost",
+	// 	Path:   "picture_goes_here.png",
+	// }
+
+	// User := &types.User{
+	// 	Subject:           "hoppity",
+	// 	EmailVerified:     true,
+	// 	GiveName:          "FirstName",
+	// 	FamilyName:        "LastName",
+	// 	Picture:           u,
+	// 	PreferredUserName: "Clown",
+	// 	Email:             "foo@example.com",
+	// 	Groups:            Groups,
+	// }
+
 	cookie := &http.Cookie{
 		Name:     "idtoken",
 		Value:    "token goes here",

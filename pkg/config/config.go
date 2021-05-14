@@ -14,6 +14,12 @@ type Config struct {
 	keySize int
 }
 
+func NewConfig() *Config {
+	return &Config{
+		keySize: getEnvAsInt("RSAKEYBYTESIZE", 2048),
+	}
+}
+
 // KeySize returns the KeySize
 func (c *Config) KeySize() int {
 	return c.keySize
